@@ -1,17 +1,29 @@
 app:
-  id: your-app-id
-  name: Team Alignment App
-  description: A Jira integration for goal tracking.
-  modules:
-    resolvers:
-      - key: resolver
-        function: index.handler
-    jira:
-      - key: jira-issue-comment
-        function: jiraResolver
-  permissions:
+  id: ari:cloud:ecosystem::app/65d741a6-7e40-4044-8184-0630734709f7
+  runtime:
+    name: nodejs
+    version: 18
+
+
+permissions:
+  scopes:
+    - read:jira-work
+    - write:jira-work
+    - storage:app
+
+modules:
+  jira:issuePanel:
+    - key: issue-panel
+      resource: main
+      title: "Issue Panel"
+      layout: basic
+
+resources:
+  - key: main
+    path: static/
+
+connectModules:
+  jira:
     scopes:
       - read:jira-work
       - write:jira-work
-      - read:jira-user
-      - write:jira-user

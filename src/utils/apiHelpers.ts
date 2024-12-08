@@ -1,28 +1,45 @@
-// apiHelper.ts
+import api, { route } from '@forge/api';
 
-import api from '@forge/api';
+// Function to add a comment to a Jira issue
+export const addJiraCommentInternal = async (issueId: string, commentText: string) => {
+  const bodyData = {
+    body: {
+      type: "doc",
+      version: 1,
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              text: commentText,
+              type: "text",
+            },
+          ],
+        },
+      ],
+    },
+  };
 
-// Helper function to make a Jira API request
-export const makeJiraApiRequest = async (route: { value: string, method: string, headers: object }) => {
-  try {
-    const response = await api.asApp().requestJira(route);
-    if (!response.ok) {
-      throw new Error(`Error fetching data from Jira: ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Jira API Request failed:', error);
-    throw new Error('Failed to make Jira API request');
+  const response = await api.asUser().requestJira(route`/rest/api/3/issue/${issueId}/comment`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(bodyData),
+  });
+
+  if (!response.ok) {
+    console.error('Failed to add comment:', await response.text());
   }
 };
 
-// Helper function to create a route for Jira API requests
-export const createJiraRoute = (path: string) => {
-  return {
-    value: path,
-    method: 'GET',
+// Function to fetch comments for a Jira issue
+export const fetchComments = async (issueId: string) => {
+  const response = await api.asUser().requestJira(route`/rest/api/3/issue/${issueId}/comment`, {
     headers: {
       'Accept': 'application/json',
     },
-  };
+  });
+  return response.json();
 };

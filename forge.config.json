@@ -1,15 +1,22 @@
 {
     "app": {
-      "id": "com.atlassian.team-alignment-app",
-      "name": "Team Alignment App"
-    },
-    "environment": {
-      "production": {
-        "jwt": "your-jwt-token",
-        "permissions": [
+      "id": "your-app-id",
+      "name": "Team Alignment App",
+      "description": "A Jira integration for goal tracking.",
+      "modules": {
+        "resolvers": [
+          {
+            "key": "resolver",
+            "function": "src/index.handler"
+          }
+        ]
+      },
+      "permissions": {
+        "scopes": [
           "read:jira-work",
           "write:jira-work",
-          "storage:app"
+          "read:jira-user",
+          "write:jira-user"
         ]
       }
     }

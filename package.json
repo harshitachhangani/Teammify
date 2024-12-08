@@ -2,7 +2,7 @@
   "name": "action-rovo",
   "version": "1.1.6",
   "description": "a sample app that defines a rovo agent and actions",
-  "main": "index.js",
+  "main": "index.ts",
   "license": "MIT",
   "private": true,
   "dependencies": {
@@ -14,10 +14,12 @@
     "@atlaskit/textfield": "^6.7.0",
     "@forge/api": "^4.1.1",
     "@forge/resolver": "^1.6.2",
-    "@forge/ui": "^1.11.1"
+    "@forge/ui": "^1.11.1",
+    "react": "^18.3.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+     "start": "forge tunnel",
+    "deploy": "forge deploy"
   },
   "keywords": [],
   "author": ""

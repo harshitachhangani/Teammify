@@ -1,9 +1,6 @@
 app:
   id: ari:cloud:ecosystem::app/65d741a6-7e40-4044-8184-0630734709f7
-  runtime:
-    name: nodejs
-    version: 18
-
+  runtime: nodejs18.x
 
 permissions:
   scopes:

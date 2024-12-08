@@ -1,100 +1,122 @@
-import React, { useState, FormEvent } from 'react';
-import invoke from '@forge/api'; // Correct
- // Import invoke from '@forge/api'
-import Button from '@atlaskit/button';
-import ProgressBar from '@atlaskit/progress-bar';
-import TextField from '@atlaskit/textfield';
-import { PageLayout } from '@atlaskit/page-layout';
-import { Box } from '@atlaskit/primitives';
+// GoalTracker.tsx
 
-// Define Goal interface for type safety
+import React, { useState, useEffect } from 'react';
+import { useStateValue } from './StateProvider'; // Assuming you're using a context or global state
+import { createJiraRoute, makeJiraApiRequest } from './apiHelper';
+import { validateLinkJiraIssueToGoalPayload } from './resolver/validations';
+
 interface Goal {
   id: string;
-  title: string;
-  description: string;
-  team: string;
-  owner: string;
-  progress: number;
-  deadline: Date;
+  name: string;
+  status: string;
+  linkedIssue?: string;
 }
 
-const GoalTracker: React.FC<{ teamName: string }> = ({ teamName }) => {
+const GoalTracker: React.FC = () => {
   const [goals, setGoals] = useState<Goal[]>([]);
-  const [newGoal, setNewGoal] = useState<Omit<Goal, 'id' | 'owner' | 'progress'>>({
-    title: '',
-    description: '',
-    team: teamName,
-    deadline: new Date()
-  });
+  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
+  const [jiraIssueKey, setJiraIssueKey] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const fetchTeamGoals = async () => {
-    try {
-      const teamGoals = await invoke('listTeamGoals', { team: teamName }) as Goal[];
-      setGoals(teamGoals);
-    } catch (error) {
-      console.error('Failed to fetch team goals:', error);
+  // Fetch goals from the backend or local storage (use appropriate method here)
+  useEffect(() => {
+    const fetchGoals = async () => {
+      // Replace with actual logic to fetch goals
+      const fetchedGoals = await fetch('/api/goals').then(res => res.json());
+      setGoals(fetchedGoals);
+    };
+
+    fetchGoals();
+  }, []);
+
+  // Handle linking a Jira issue to a goal
+  const handleLinkJiraIssue = async () => {
+    if (selectedGoal) {
+      try {
+        // Validate the payload
+        validateLinkJiraIssueToGoalPayload({
+          goalId: selectedGoal.id,
+          issueKey: jiraIssueKey,
+        });
+
+        // Link Jira issue to goal
+        await fetch(`/api/link-jira-issue`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goalId: selectedGoal.id, issueKey: jiraIssueKey }),
+        });
+
+        setGoals((prevGoals) =>
+          prevGoals.map((goal) =>
+            goal.id === selectedGoal.id ? { ...goal, linkedIssue: jiraIssueKey } : goal
+          )
+        );
+      } catch (error) {
+        console.error('Error linking Jira issue:', error);
+      }
     }
   };
 
-  const createGoal = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      const createdGoal = await invoke('createGoal', {
-        ...newGoal,
-        owner: 'currentUser', // Replace with actual user context
-        progress: 0
-      }) as Goal;
+  // Handle syncing goal progress with Jira issue status
+  const handleSyncGoalProgress = async () => {
+    if (selectedGoal?.linkedIssue) {
+      setLoading(true);
 
-      setGoals(prevGoals => [...prevGoals, createdGoal]);
-      setNewGoal({
-        title: '',
-        description: '',
-        team: teamName,
-        deadline: new Date()
-      });
-    } catch (error) {
-      console.error('Failed to create goal:', error);
+      try {
+        const route = createJiraRoute(`/rest/api/3/issue/${selectedGoal.linkedIssue}`);
+        const jiraData = await makeJiraApiRequest(route);
+
+        // Assuming that the Jira response contains the issue status
+        const updatedStatus = jiraData.fields.status.name;
+        setGoals((prevGoals) =>
+          prevGoals.map((goal) =>
+            goal.id === selectedGoal.id ? { ...goal, status: updatedStatus } : goal
+          )
+        );
+      } catch (error) {
+        console.error('Error syncing goal with Jira issue:', error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
-
-  // Fetch goals when component mounts
-  React.useEffect(() => {
-    fetchTeamGoals();
-  }, [teamName]);
 
   return (
-    <PageLayout>
-      <Box>
-        <h2>Team Goals: {teamName}</h2>
-        
-        {goals.map(goal => (
-          <div key={goal.id}>
-            <h3>{goal.title}</h3>
-            <ProgressBar value={goal.progress / 100} />
-          </div>
-        ))}
-        
-        <form onSubmit={createGoal}>
-          <TextField
-            name="goalTitle"
-            label="Goal Title"
-            value={newGoal.title}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-              setNewGoal(prev => ({ ...prev, title: e.target.value }))
-            }
+    <div>
+      <h1>Goal Tracker</h1>
+
+      <div>
+        <h2>Goals</h2>
+        <ul>
+          {goals.map((goal) => (
+            <li key={goal.id} onClick={() => setSelectedGoal(goal)}>
+              {goal.name} - Status: {goal.status}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {selectedGoal && (
+        <div>
+          <h3>Selected Goal: {selectedGoal.name}</h3>
+          <p>Status: {selectedGoal.status}</p>
+          <p>Linked Jira Issue: {selectedGoal.linkedIssue || 'Not Linked'}</p>
+
+          {/* Input for Jira issue key */}
+          <input
+            type="text"
+            placeholder="Enter Jira Issue Key"
+            value={jiraIssueKey}
+            onChange={(e) => setJiraIssueKey(e.target.value)}
           />
-          <TextField
-            name="goalDescription"
-            label="Goal Description"
-            value={newGoal.description}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-              setNewGoal(prev => ({ ...prev, description: e.target.value }))
-            }
-          />
-          <Button type="submit">Create Goal</Button>
-        </form>
-      </Box>
-    </PageLayout>
+
+          <button onClick={handleLinkJiraIssue}>Link Jira Issue</button>
+          <button onClick={handleSyncGoalProgress} disabled={loading}>
+            {loading ? 'Syncing...' : 'Sync Goal with Jira'}
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 

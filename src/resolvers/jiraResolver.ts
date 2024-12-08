@@ -1,17 +1,20 @@
 import Resolver from '@forge/resolver';
-import { api, storage } from '@forge/api';
+import { storage } from '@forge/api';
+import api from '@forge/api';
 
 const resolver = new Resolver();
 
 // Resolver to fetch Jira issues
 resolver.define('fetchJiraIssues', async () => {
-  const response = await api.asApp().requestJira('/rest/api/3/search', {
+  const route = {
+    value: '/rest/api/3/search', // Add 'value' property for the path
     method: 'GET',
     headers: {
       'Accept': 'application/json',
     },
-  });
+  };
 
+  const response = await api.asApp().requestJira(route); // Use route object
   const issues = await response.json();
   return issues.issues.map((issue) => ({
     id: issue.id,
@@ -45,13 +48,15 @@ resolver.define('syncGoalWithJira', async (req) => {
     return { success: false, message: 'Goal or linked Jira issue not found!' };
   }
 
-  const response = await api.asApp().requestJira(`/rest/api/3/issue/${goal.linkedIssue}`, {
+  const route = {
+    value: `/rest/api/3/issue/${goal.linkedIssue}`, // Add 'value' property for the path
     method: 'GET',
     headers: {
       'Accept': 'application/json',
     },
-  });
+  };
 
+  const response = await api.asApp().requestJira(route); // Use route object
   const issue = await response.json();
   goal.status = issue.fields.status.name; // Sync goal status with issue status
   await storage.set(goalId, goal);

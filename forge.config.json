@@ -1,36 +1,16 @@
 {
-    "id": "your-app-id",  
-    "version": "1.0.0",
-    "modules": {
-      "jira:customPage": {
-        "key": "goals-page",
-        "function": "resolver-handler",
-        "title": "Team Goals Page",
-        "layout": "basic"
-      }
-    },
-    "permissions": {
-      "scopes": [
-        "read:jira-work",
-        "write:jira-work",
-        "storage:app"
-      ]
-    },
-    "providers": {
-      "api": {
-        "jira": {
-          "cloud": {}
-        }
-      }
-    },
-    "resources": {
-      "function": {
-        "memory": "128mb"
-      }
-    },
     "app": {
-      "runtime": {
-        "node": "18"
+      "id": "com.atlassian.team-alignment-app",
+      "name": "Team Alignment App"
+    },
+    "environment": {
+      "production": {
+        "jwt": "your-jwt-token",
+        "permissions": [
+          "read:jira-work",
+          "write:jira-work",
+          "storage:app"
+        ]
       }
     }
   }

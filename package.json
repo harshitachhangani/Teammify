@@ -6,6 +6,19 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@forge/api": "^4.1.1"
-  }
+    "@atlaskit/button": "^20.3.4",
+    "@atlaskit/css": "^0.7.0",
+    "@atlaskit/page-layout": "^3.11.3",
+    "@atlaskit/primitives": "^13.3.1",
+    "@atlaskit/progress-bar": "^3.0.1",
+    "@atlaskit/textfield": "^6.7.0",
+    "@forge/api": "^4.1.1",
+    "@forge/resolver": "^1.6.2",
+    "@forge/ui": "^1.11.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": ""
 }

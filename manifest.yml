@@ -9,18 +9,17 @@ permissions:
     - storage:app
   external:
     fetch:
-      - http://localhost:3000/api/fetchJiraComments
-      - http://localhost:3000/api/addCommentToJira
+      backend:
+        - https://loud-symbols-lay.loca.lt/api/addCommentToJira
+        - https://loud-symbols-lay.loca.lt/api/fetchJiraComments
 
 modules:
   jira:issuePanel:
     - key: issue-panel
-      resource: main
       title: "Issue Panel"
+      icon: "https://your-icon-url.com/icon.png"
+      resource: main
       layout: basic
-      icon: "https://your-icon-url.com/icon.png"  # Replace with a valid URL for the icon
-      function: "issuePanelFunction"  # Define the function for this panel
-      description: "Panel to add comments and fetch Jira comments"
 
 resources:
   - key: main

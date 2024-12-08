@@ -1,53 +1,41 @@
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-
 const app = express();
-const PORT = 3000;
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // Middleware to parse JSON
 
-// Dummy Data for Demonstration
-const comments = {
-  "TEST-123": [
-    { id: 1, text: "This is a comment for issue TEST-123." },
-    { id: 2, text: "Another comment for issue TEST-123." }
-  ],
-};
-
-// Endpoint to fetch comments for a Jira issue
-app.post('/api/fetchJiraComments', (req, res) => {
-  const { issueId } = req.body;
-
-  if (!issueId) {
-    return res.status(400).json({ error: 'Issue ID is required.' });
-  }
-
-  const issueComments = comments[issueId] || [];
-  res.json({ comments: issueComments });
-});
-
-// Endpoint to add a comment to a Jira issue
+// Add a comment to Jira issue
 app.post('/api/addCommentToJira', (req, res) => {
   const { issueId, comment } = req.body;
 
-  if (!issueId || !comment) {
-    return res.status(400).json({ error: 'Issue ID and comment are required.' });
+  if (issueId && comment) {
+    // Simulate adding a comment
+    console.log(`Adding comment: ${comment} to issue: ${issueId}`);
+    res.json({ success: true, message: 'Comment added successfully!' });
+  } else {
+    res.status(400).json({ success: false, message: 'Invalid input' });
   }
+});
 
-  if (!comments[issueId]) {
-    comments[issueId] = [];
+// Fetch comments for a Jira issue
+app.post('/api/fetchJiraComments', (req, res) => {
+  const { issueId } = req.body;
+
+  if (issueId) {
+    // Simulate fetching comments
+    console.log(`Fetching comments for issue: ${issueId}`);
+    res.json({
+      comments: [
+        { body: 'This is a sample comment 1' },
+        { body: 'This is a sample comment 2' },
+      ],
+    });
+  } else {
+    res.status(400).json({ success: false, message: 'Invalid input' });
   }
-
-  const newComment = { id: comments[issueId].length + 1, text: comment };
-  comments[issueId].push(newComment);
-
-  res.json({ message: 'Comment added successfully.', comment: newComment });
 });
 
 // Start the server
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Backend running at http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

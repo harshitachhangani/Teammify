@@ -1,12 +1,16 @@
 app:
   id: ari:cloud:ecosystem::app/65d741a6-7e40-4044-8184-0630734709f7
-  runtime: nodejs18.x
-
+  runtime:
+    name: nodejs18.x
 permissions:
   scopes:
     - read:jira-work
     - write:jira-work
     - storage:app
+  external:
+    fetch:
+      - http://localhost:3000/api/fetchJiraComments
+      - http://localhost:3000/api/addCommentToJira
 
 modules:
   jira:issuePanel:
@@ -14,13 +18,10 @@ modules:
       resource: main
       title: "Issue Panel"
       layout: basic
+      icon: "https://your-icon-url.com/icon.png"  # Replace with a valid URL for the icon
+      function: "issuePanelFunction"  # Define the function for this panel
+      description: "Panel to add comments and fetch Jira comments"
 
 resources:
   - key: main
     path: static/
-
-connectModules:
-  jira:
-    scopes:
-      - read:jira-work
-      - write:jira-work

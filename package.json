@@ -15,12 +15,30 @@
     "@forge/api": "^4.1.1",
     "@forge/resolver": "^1.6.2",
     "@forge/ui": "^1.11.1",
+    "axios": "^1.7.9",
     "react": "^18.3.1"
   },
   "scripts": {
-     "start": "forge tunnel",
-    "deploy": "forge deploy"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "keywords": [],
-  "author": ""
+  "author": "",
+  "devDependencies": {
+    "react-scripts": "^5.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

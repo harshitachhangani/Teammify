@@ -10,8 +10,8 @@ permissions:
   external:
     fetch:
       backend:
-        - https://loud-symbols-lay.loca.lt/api/addCommentToJira
-        - https://loud-symbols-lay.loca.lt/api/fetchJiraComments
+        - https://sharp-ghosts-greet.loca.lt/api/addCommentToJira
+        - https://sharp-ghosts-greet.loca.lt/api/fetchJiraComments
 
 modules:
   jira:issuePanel:

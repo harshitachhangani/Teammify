@@ -1,23 +1,47 @@
-import api, { route } from '@forge/api';
-import  Resolver  from '@forge/resolver';
-import { addJiraCommentInternal, fetchComments } from './utils/apiHelpers';
+import Resolver from '@forge/resolver';
+import { searchArticles, addArticle, deleteArticle } from './resolvers/knowledgeResolver';
+import { fetchGoals, updateGoalStatus, createGoal } from './resolvers/goalResolver';
 
-// Initialize the Resolver
 const resolver = new Resolver();
 
-// Resolver to add a comment to a Jira issue
-resolver.define('addCommentToJira', async (req) => {
-  const { issueId, comment } = req.payload;
-  await addJiraCommentInternal(issueId, comment);
-  return { success: true };
+// Define resolver for searching articles
+resolver.define('searchArticles', async (req) => {
+    const { query = '', team = '' } = req.payload;
+    return await searchArticles(query, team);
 });
 
-// Resolver to fetch all comments for a Jira issue
-resolver.define('fetchJiraComments', async (req) => {
-  const { issueId } = req.payload;
-  const comments = await fetchComments(issueId);
-  return { comments };
+// Define resolver for adding an article
+resolver.define('addArticle', async (req) => {
+    const { article } = req.payload;
+    const articleWithId = {
+        ...article,
+        id: article.id || `article-${Date.now()}` // Generate ID if not provided
+    };
+    return await addArticle(articleWithId);
 });
 
-// Export resolver definitions
+// Define resolver for deleting an article
+resolver.define('deleteArticle', async (req) => {
+    const { articleId } = req.payload;
+    return await deleteArticle(articleId);
+});
+
+// Define resolver for fetching goals
+resolver.define('fetchGoals', async () => {
+    return await fetchGoals();
+});
+
+// Define resolver for updating goal status
+resolver.define('updateGoalStatus', async (req) => {
+    const { goalId, status } = req.payload;
+    return await updateGoalStatus(goalId, status);
+});
+
+// Define resolver for creating a goal
+resolver.define('createGoal', async (req) => {
+    const { goal } = req.payload;
+    return await createGoal(goal);
+});
+
+// Export the resolver
 export const handler = resolver.getDefinitions();

@@ -2,6 +2,7 @@ app:
   id: ari:cloud:ecosystem::app/65d741a6-7e40-4044-8184-0630734709f7
   runtime:
     name: nodejs18.x
+
 permissions:
   scopes:
     - read:jira-work
@@ -10,8 +11,9 @@ permissions:
   external:
     fetch:
       backend:
-        - https://sharp-ghosts-greet.loca.lt/api/addCommentToJira
-        - https://sharp-ghosts-greet.loca.lt/api/fetchJiraComments
+        - https://swift-owls-see.loca.lt/api/addCommentToJira
+        - https://swift-owls-see.loca.lt/api/fetchJiraComments
+    images: [] # Empty or remove entirely if not using images.
 
 modules:
   jira:issuePanel:

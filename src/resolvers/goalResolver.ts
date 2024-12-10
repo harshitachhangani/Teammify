@@ -1,54 +1,58 @@
-import  Resolver  from '@forge/resolver';
-import { storage } from '@forge/api';
+// goalResolver.ts
 
-const resolver = new Resolver();
+interface Goal {
+  id: string;
+  title: string;
+  description: string;
+  status: string; // Example: 'Pending', 'In Progress', 'Completed'
+  deadline: string; // Format: YYYY-MM-DD
+  team: string; // Associated team
+}
 
-// Resolver to create a new goal
-resolver.define('createGoal', async (req) => {
-  const { goalId, goalTitle, description, dueDate } = req.payload;
+const goals: Goal[] = []; // In-memory storage for demonstration. Replace with a database call in production.
 
-  // Save the goal to Forge Storage
-  await storage.set(goalId, {
-    goalId,
-    goalTitle,
-    description,
-    dueDate,
-    status: 'Pending',
-  });
-
-  return { success: true, message: 'Goal created successfully!' };
-});
-
-// Resolver to fetch all goals
-resolver.define('getGoals', async () => {
-    const results: Array<{ key: string; value: any }> = [];
-  
-    // Use the query builder to iterate over all storage entries
-    const queryResult = await storage.query().limit(50).getMany();
-  
-    for (const entry of queryResult.results) {
-      results.push({ key: entry.key, value: entry.value });
-    }
-  
-    return results.map((entry) => entry.value); // Return only the stored values
-  });
-  
-  
-  
-
-// Resolver to update the status of a goal
-resolver.define('updateGoalStatus', async (req) => {
-  const { goalId, status } = req.payload;
-
-  const goal = await storage.get(goalId);
-  if (!goal) {
-    return { success: false, message: 'Goal not found!' };
+// Fetch all goals
+export async function fetchGoals(): Promise<Goal[]> {
+  try {
+    return goals; // Replace with actual database fetch logic
+  } catch (error) {
+    console.error('Error fetching goals:', error);
+    throw new Error('Failed to fetch goals');
   }
+}
 
-  goal.status = status;
-  await storage.set(goalId, goal);
+// Update goal status
+export async function updateGoalStatus(goalId: string, status: string): Promise<string> {
+  try {
+    const goal = goals.find((g) => g.id === goalId);
+    if (!goal) {
+      throw new Error('Goal not found');
+    }
 
-  return { success: true, message: 'Goal status updated successfully!' };
-});
+    goal.status = status;
+    return 'Goal status updated successfully';
+  } catch (error) {
+    console.error('Error updating goal status:', error);
+    throw new Error('Failed to update goal status');
+  }
+}
 
-export const handler = resolver.getDefinitions();
+// Create a new goal
+export async function createGoal(goal: { title: string; description: string; deadline: string; team: string }): Promise<Goal> {
+  try {
+    const newGoal: Goal = {
+      id: `goal-${Date.now()}`, // Generate a unique ID
+      title: goal.title,
+      description: goal.description,
+      status: 'Pending', // Default status
+      deadline: goal.deadline,
+      team: goal.team,
+    };
+
+    goals.push(newGoal); // Add to the in-memory array. Replace with database logic in production.
+    return newGoal;
+  } catch (error) {
+    console.error('Error creating goal:', error);
+    throw new Error('Failed to create goal');
+  }
+}

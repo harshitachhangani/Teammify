@@ -22,7 +22,7 @@ This is an Atlassian Forge app that helps teams align their work to organization
 
 ## User Roles
 
-1. **Admins**: Manage goals, assign access, and oversee knowledge repositories.
+1. **Admins**: Manage goals, assign access, & oversee knowledge repositories.
 2. **Team Members**: Create/track personal goals and access knowledge bases.
 
 ## Tech Stack

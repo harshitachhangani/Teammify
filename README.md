@@ -1,75 +1,175 @@
-# Teammify
+# Teammify 🚀🤝
 
-This is an Atlassian Forge app that helps teams align their work to organizational goals, track progress, and enable seamless knowledge sharing across the organization.
+## Overview
 
-## Features
+Teammify is an innovative Atlassian Forge app designed to revolutionize team collaboration, goal tracking, and knowledge sharing across organizations. By seamlessly integrating with Jira, Teammify empowers teams to align their work with strategic objectives, track progress, and foster a culture of continuous improvement.
 
-1. **Goal Alignment**:
-   - Users (team members or managers) can create, edit, and track goals.
-   - Align individual/team goals with larger organizational objectives.
-   - Visualize progress through charts or Kanban boards.
-   - Send reminders or notifications about pending/achieved goals.
+## 🌟 Key Features
 
-2. **Knowledge Flow**:
-   - A centralized repository for storing, searching, and categorizing knowledge (documents, FAQs, insights).
-   - Teams can share knowledge across departments or within projects.
-   - Tagging and AI-powered search for ease of finding relevant data.
+### 1. Goal Alignment 🎯
+- Create, edit, and track individual and team goals
+- Align personal objectives with organizational strategies
+- Visualize progress through interactive charts and Kanban boards
+- Automated reminders and notifications for goal tracking
 
-3. **Jira Integration**:
-   - Allow teams to link Jira issues with app goals.
-   - Sync progress between Jira issues and app goals.
-   - Provide a Jira-powered dashboard for goal tracking.
+### 2. Knowledge Flow 📚
+- Centralized knowledge repository
+- Cross-departmental knowledge sharing
+- AI-powered search and intelligent tagging
+- Easy document categorization and retrieval
 
-## User Roles
+### 3. Seamless Jira Integration 🔗
+- Direct linking of Jira issues to app goals
+- Real-time progress synchronization
+- Comprehensive Jira-powered goal tracking dashboard
 
-1. **Admins**: Manage goals, assign access, & oversee knowledge repositories.
-2. **Team Members**: Create/track personal goals and access knowledge bases.
+## 👥 User Roles
 
-## Tech Stack
+### Admins 
+- Manage organizational goals
+- Control access and permissions
+- Oversee knowledge repositories
+- Configure system-wide settings
 
-- **Frontend**: Forge UI Kit, React 
-- **Backend**: Forge Resolvers, Node.js
-- **Storage**: Forge Storage API
-- **Integration**: Atlassian REST APIs - Jira
-- **Design System**: Atlassian Design System (Atlaskit)
-- **Authentication**: Forge Authentication
-- **AI Features**: Forge AI Rovo integration
+### Team Members
+- Create and track personal goals
+- Access and contribute to knowledge bases
+- Monitor progress and achievements
+- Collaborate across teams
 
-## Prerequisites
+## 🧰 Technology Stack
 
-1. Node.js (version 16 or higher)
-2. npm (Node Package Manager)
-3. Forge CLI installed globally
-4. Atlassian Developer Account
-5. Access to a Jira instance (e.g., Jira Cloud)
-6. Visual Studio Code (or your preferred IDE)
-7. Git for version control
+### Frontend
+- Forge UI Kit
+- React
+- Atlassian Design System (Atlaskit)
 
-## Project Setup
+### Backend
+- Forge Resolvers
+- Node.js
+- TypeScript
 
-1. **Set Up Your Environment**:
-   - Install Node.js and npm.
-   - Install Forge CLI: `npm install -g @forge/cli`.
-   - Log in to Atlassian: `forge login`.
+### Infrastructure
+- Forge Storage API
+- Atlassian REST APIs
+- Forge Authentication
+- Rovo AI Integration
 
-2. **Initialize the Project**:
-   - Create a new Forge app: `forge create team-alignment-app`.
-   - Navigate to the project folder: `cd team-alignment-app`.
+### Database
+- Forge Storage
+- JSON-based document storage
 
-3. **Edit `manifest.yml`**:
-   - Add required permissions (e.g., `read:jira-work`, `write:jira-work`, `storage:app`).
-   - Define modules for UI (like a custom Jira page).
+## 🛠 Prerequisites
 
-4. **Install Dependencies**:
-   - Add essential packages: `npm install @forge/ui @forge/resolver`.
+Before setting up Teammify, ensure you have:
 
-5. **Set Up APIs**:
-   - Use Atlassian REST API to fetch Jira data.
-   - Generate API tokens if needed.
+1. **Development Environment**
+- Node.js (version 16 or higher)
+- npm (Node Package Manager)
+- Git
+- Visual Studio Code or preferred IDE
 
-6. **Develop Features**:
-   - Create UI components, resolvers, and storage functions.
+2. **Atlassian Requirements**
+- Atlassian Developer Account
+- Jira Cloud instance
+- Forge CLI installed
+- API access tokens
 
-7. **Deploy and Test**:
-   - Deploy the app: `forge deploy`.
-   - Install the app on your Jira instance: `forge install`.
+## 🚀 Installation Steps
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/teammify.git
+cd teammify
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Configure Environment
+```bash
+# Install Forge CLI globally
+npm install -g @forge/cli
+
+# Login to Atlassian
+forge login
+```
+
+### 4. Create Forge App
+```bash
+# Initialize new Forge app
+forge create team-alignment-app
+```
+
+### 5. Setup Configuration
+Edit `manifest.yml` to configure:
+- Jira work permissions
+- Storage access
+- UI modules
+- API integrations
+
+### 6. Deploy Application
+```bash
+# Deploy to Atlassian
+forge deploy
+
+# Install on Jira instance
+forge install
+```
+
+## 🔐 Security Features
+
+- Secure Atlassian OAuth authentication
+- Role-based access control
+- Encrypted data transmission
+- Granular permission management
+- Compliance with Atlassian security standards
+
+## 📊 Performance Metrics
+
+- Low latency API calls
+- Efficient caching mechanisms
+- Optimized React rendering
+- Minimal performance overhead
+
+## 🤝 Contributing Guidelines
+
+### How to Contribute
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 👥 Project Developers
+
+- [**Harshita Chhangani**](https://github.com/harshitachhangani)
+- [**Atharva Chivate**](https://github.com/AtharvaChivate)
+
+## 📄 Licensing
+
+- **License**: MIT License
+- **Open Source**: Yes
+- **Commercial Use**: Permitted with attribution
+
+
+### Reporting Bugs
+Please use GitHub Issues and include:
+- Detailed description
+- Steps to reproduce
+- Expected vs. actual behavior
+- Screenshots (if applicable)
+
+## 🏆 Acknowledgments
+
+- Atlassian Forge Platform
+- React Community
+- Open Source Contributors
+
+---
+
+**Crafted with ❤️ by Teammify Development Team**
+
+*Empowering Teams, Achieving Goals*
